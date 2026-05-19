@@ -14,7 +14,150 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chamados: {
+        Row: {
+          assunto: string
+          created_at: string
+          descricao: string
+          id: string
+          maquina: string | null
+          prioridade: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          assunto: string
+          created_at?: string
+          descricao: string
+          id?: string
+          maquina?: string | null
+          prioridade?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          assunto?: string
+          created_at?: string
+          descricao?: string
+          id?: string
+          maquina?: string | null
+          prioridade?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      denuncias: {
+        Row: {
+          anonima: boolean
+          categoria: string
+          created_at: string
+          descricao: string
+          id: string
+          titulo: string
+          user_id: string
+        }
+        Insert: {
+          anonima?: boolean
+          categoria: string
+          created_at?: string
+          descricao: string
+          id?: string
+          titulo: string
+          user_id: string
+        }
+        Update: {
+          anonima?: boolean
+          categoria?: string
+          created_at?: string
+          descricao?: string
+          id?: string
+          titulo?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      epis: {
+        Row: {
+          created_at: string
+          id: string
+          motivo: string | null
+          quantidade: number
+          status: string
+          tamanho: string
+          tipo: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          motivo?: string | null
+          quantidade?: number
+          status?: string
+          tamanho: string
+          tipo: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          motivo?: string | null
+          quantidade?: number
+          status?: string
+          tamanho?: string
+          tipo?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      pedidos: {
+        Row: {
+          created_at: string
+          id: string
+          produto: string
+          quantidade: number
+          status: string
+          total: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          produto: string
+          quantidade: number
+          status?: string
+          total?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          produto?: string
+          quantidade?: number
+          status?: string
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          nome: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          nome: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          nome?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
