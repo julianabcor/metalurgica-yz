@@ -128,7 +128,7 @@ export function useStore<K extends keyof Schema>(key: K) {
       const { data: sess } = await supabase.auth.getSession();
       const uid = sess.session?.user?.id;
       if (!uid) { console.error("Não autenticado"); return; }
-      const { error } = await supabase.from(TABLES[key]).insert(toInsert(key, item, uid));
+      const { error } = await db.from(TABLES[key]).insert(toInsert(key, item, uid));
       if (error) { console.error(error); return; }
       emitRefresh();
     },
