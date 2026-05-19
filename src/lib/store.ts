@@ -137,7 +137,7 @@ export function useStore<K extends keyof Schema>(key: K) {
 
   const remove = useCallback(
     async (id: string) => {
-      const { error } = await supabase.from(TABLES[key]).delete().eq("id", id);
+      const { error } = await db.from(TABLES[key]).delete().eq("id", id);
       if (error) { console.error(error); return; }
       emitRefresh();
     },
