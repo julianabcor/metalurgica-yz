@@ -32,10 +32,11 @@ function Stat({
 
 function Dashboard() {
   const counts = useCounts();
+  const { user } = useAuth();
   return (
     <AppShell>
       <p className="text-sm text-muted-foreground">Bem-vindo de volta,</p>
-      <h1 className="text-3xl font-bold tracking-tight mb-8">Juliana Branco Cordeiro</h1>
+      <h1 className="text-3xl font-bold tracking-tight mb-8">{user?.name ?? "Visitante"}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         <Stat icon={Package} value={counts.pedidos} label="Pedidos" tone="bg-blue-50 text-blue-600" />
