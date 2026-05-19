@@ -17,11 +17,11 @@ function LoginPage() {
     if (ready && user) navigate({ to: "/dashboard" });
   }, [ready, user, navigate]);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     try {
-      login(email.trim(), password);
+      await login(email.trim(), password);
       navigate({ to: "/dashboard" });
     } catch (err) {
       setError((err as Error).message);
