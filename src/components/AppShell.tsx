@@ -15,7 +15,7 @@ import { useEffect, type ReactNode } from "react";
 import { useAuth } from "@/lib/auth";
 
 const nav = [
-  { to: "/", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/pedidos", label: "Pedidos", icon: Package },
   { to: "/suporte", label: "Suporte", icon: LifeBuoy },
   { to: "/maquinas", label: "Máquinas", icon: Activity },
@@ -60,10 +60,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
         <nav className="px-3 py-2 flex-1 space-y-1">
           {nav.map((item) => {
-            const active =
-              item.to === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.to);
+            const active = pathname === item.to || pathname.startsWith(item.to + "/");
             const Icon = item.icon;
             return (
               <Link
