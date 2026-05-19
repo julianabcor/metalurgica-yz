@@ -19,12 +19,12 @@ function RegisterPage() {
     if (ready && user) navigate({ to: "/dashboard" });
   }, [ready, user, navigate]);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     if (password.length < 6) return setError("A senha deve ter pelo menos 6 caracteres.");
     try {
-      register(name.trim(), email.trim(), password);
+      await register(name.trim(), email.trim(), password);
       navigate({ to: "/dashboard" });
     } catch (err) {
       setError((err as Error).message);

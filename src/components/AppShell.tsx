@@ -94,8 +94,8 @@ export function AppShell({ children }: { children: ReactNode }) {
             <div className="text-xs truncate">{user.email}</div>
           </div>
           <button
-            onClick={() => {
-              logout();
+            onClick={async () => {
+              await logout();
               navigate({ to: "/login" });
             }}
             className="w-full flex items-center gap-2 rounded-md px-3 py-2 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-white"
