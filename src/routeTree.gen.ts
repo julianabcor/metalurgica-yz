@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SuporteRouteImport } from './routes/suporte'
 import { Route as PedidosRouteImport } from './routes/pedidos'
+import { Route as MaquinasRouteImport } from './routes/maquinas'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SuporteRoute = SuporteRouteImport.update({
@@ -23,6 +24,11 @@ const PedidosRoute = PedidosRouteImport.update({
   path: '/pedidos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MaquinasRoute = MaquinasRouteImport.update({
+  id: '/maquinas',
+  path: '/maquinas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,30 +37,34 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
   '/suporte': typeof SuporteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
   '/suporte': typeof SuporteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
   '/suporte': typeof SuporteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pedidos' | '/suporte'
+  fullPaths: '/' | '/maquinas' | '/pedidos' | '/suporte'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pedidos' | '/suporte'
-  id: '__root__' | '/' | '/pedidos' | '/suporte'
+  to: '/' | '/maquinas' | '/pedidos' | '/suporte'
+  id: '__root__' | '/' | '/maquinas' | '/pedidos' | '/suporte'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MaquinasRoute: typeof MaquinasRoute
   PedidosRoute: typeof PedidosRoute
   SuporteRoute: typeof SuporteRoute
 }
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PedidosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/maquinas': {
+      id: '/maquinas'
+      path: '/maquinas'
+      fullPath: '/maquinas'
+      preLoaderRoute: typeof MaquinasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MaquinasRoute: MaquinasRoute,
   PedidosRoute: PedidosRoute,
   SuporteRoute: SuporteRoute,
 }
