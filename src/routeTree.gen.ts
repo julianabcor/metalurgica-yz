@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SuporteRouteImport } from './routes/suporte'
 import { Route as PedidosRouteImport } from './routes/pedidos'
 import { Route as MaquinasRouteImport } from './routes/maquinas'
+import { Route as EpiRouteImport } from './routes/epi'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SuporteRoute = SuporteRouteImport.update({
@@ -29,6 +30,11 @@ const MaquinasRoute = MaquinasRouteImport.update({
   path: '/maquinas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EpiRoute = EpiRouteImport.update({
+  id: '/epi',
+  path: '/epi',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +43,14 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/epi': typeof EpiRoute
   '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
   '/suporte': typeof SuporteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/epi': typeof EpiRoute
   '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
   '/suporte': typeof SuporteRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/epi': typeof EpiRoute
   '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
   '/suporte': typeof SuporteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/maquinas' | '/pedidos' | '/suporte'
+  fullPaths: '/' | '/epi' | '/maquinas' | '/pedidos' | '/suporte'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/maquinas' | '/pedidos' | '/suporte'
-  id: '__root__' | '/' | '/maquinas' | '/pedidos' | '/suporte'
+  to: '/' | '/epi' | '/maquinas' | '/pedidos' | '/suporte'
+  id: '__root__' | '/' | '/epi' | '/maquinas' | '/pedidos' | '/suporte'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EpiRoute: typeof EpiRoute
   MaquinasRoute: typeof MaquinasRoute
   PedidosRoute: typeof PedidosRoute
   SuporteRoute: typeof SuporteRoute
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MaquinasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/epi': {
+      id: '/epi'
+      path: '/epi'
+      fullPath: '/epi'
+      preLoaderRoute: typeof EpiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EpiRoute: EpiRoute,
   MaquinasRoute: MaquinasRoute,
   PedidosRoute: PedidosRoute,
   SuporteRoute: SuporteRoute,
