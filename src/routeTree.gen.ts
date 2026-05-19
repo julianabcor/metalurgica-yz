@@ -13,9 +13,11 @@ import { Route as SuporteRouteImport } from './routes/suporte'
 import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as PedidosRouteImport } from './routes/pedidos'
 import { Route as MaquinasRouteImport } from './routes/maquinas'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as EpiRouteImport } from './routes/epi'
 import { Route as DocumentosRouteImport } from './routes/documentos'
 import { Route as DenunciasRouteImport } from './routes/denuncias'
+import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SuporteRoute = SuporteRouteImport.update({
@@ -38,6 +40,11 @@ const MaquinasRoute = MaquinasRouteImport.update({
   path: '/maquinas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EpiRoute = EpiRouteImport.update({
   id: '/epi',
   path: '/epi',
@@ -53,6 +60,11 @@ const DenunciasRoute = DenunciasRouteImport.update({
   path: '/denuncias',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CadastroRoute = CadastroRouteImport.update({
+  id: '/cadastro',
+  path: '/cadastro',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -61,9 +73,11 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cadastro': typeof CadastroRoute
   '/denuncias': typeof DenunciasRoute
   '/documentos': typeof DocumentosRoute
   '/epi': typeof EpiRoute
+  '/login': typeof LoginRoute
   '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
   '/sobre': typeof SobreRoute
@@ -71,9 +85,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cadastro': typeof CadastroRoute
   '/denuncias': typeof DenunciasRoute
   '/documentos': typeof DocumentosRoute
   '/epi': typeof EpiRoute
+  '/login': typeof LoginRoute
   '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
   '/sobre': typeof SobreRoute
@@ -82,9 +98,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cadastro': typeof CadastroRoute
   '/denuncias': typeof DenunciasRoute
   '/documentos': typeof DocumentosRoute
   '/epi': typeof EpiRoute
+  '/login': typeof LoginRoute
   '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
   '/sobre': typeof SobreRoute
@@ -94,9 +112,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/cadastro'
     | '/denuncias'
     | '/documentos'
     | '/epi'
+    | '/login'
     | '/maquinas'
     | '/pedidos'
     | '/sobre'
@@ -104,9 +124,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/cadastro'
     | '/denuncias'
     | '/documentos'
     | '/epi'
+    | '/login'
     | '/maquinas'
     | '/pedidos'
     | '/sobre'
@@ -114,9 +136,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/cadastro'
     | '/denuncias'
     | '/documentos'
     | '/epi'
+    | '/login'
     | '/maquinas'
     | '/pedidos'
     | '/sobre'
@@ -125,9 +149,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CadastroRoute: typeof CadastroRoute
   DenunciasRoute: typeof DenunciasRoute
   DocumentosRoute: typeof DocumentosRoute
   EpiRoute: typeof EpiRoute
+  LoginRoute: typeof LoginRoute
   MaquinasRoute: typeof MaquinasRoute
   PedidosRoute: typeof PedidosRoute
   SobreRoute: typeof SobreRoute
@@ -164,6 +190,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MaquinasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/epi': {
       id: '/epi'
       path: '/epi'
@@ -185,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DenunciasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cadastro': {
+      id: '/cadastro'
+      path: '/cadastro'
+      fullPath: '/cadastro'
+      preLoaderRoute: typeof CadastroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -197,9 +237,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CadastroRoute: CadastroRoute,
   DenunciasRoute: DenunciasRoute,
   DocumentosRoute: DocumentosRoute,
   EpiRoute: EpiRoute,
+  LoginRoute: LoginRoute,
   MaquinasRoute: MaquinasRoute,
   PedidosRoute: PedidosRoute,
   SobreRoute: SobreRoute,
