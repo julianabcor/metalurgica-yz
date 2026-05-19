@@ -109,7 +109,7 @@ export function useStore<K extends keyof Schema>(key: K) {
       .select("*")
       .order("created_at", { ascending: false });
     if (error) { console.error(error); return; }
-    setItems((data ?? []).map((r) => fromRow(key, r as Record<string, unknown>)) as Schema[K]);
+    setItems((data ?? []).map((r: Record<string, unknown>) => fromRow(key, r)) as Schema[K]);
   }, [key]);
 
   useEffect(() => {
