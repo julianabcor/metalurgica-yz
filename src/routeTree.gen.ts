@@ -17,6 +17,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as EpiRouteImport } from './routes/epi'
 import { Route as DocumentosRouteImport } from './routes/documentos'
 import { Route as DenunciasRouteImport } from './routes/denuncias'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -60,6 +61,11 @@ const DenunciasRoute = DenunciasRouteImport.update({
   path: '/denuncias',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CadastroRoute = CadastroRouteImport.update({
   id: '/cadastro',
   path: '/cadastro',
@@ -74,6 +80,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
+  '/dashboard': typeof DashboardRoute
   '/denuncias': typeof DenunciasRoute
   '/documentos': typeof DocumentosRoute
   '/epi': typeof EpiRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
+  '/dashboard': typeof DashboardRoute
   '/denuncias': typeof DenunciasRoute
   '/documentos': typeof DocumentosRoute
   '/epi': typeof EpiRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
+  '/dashboard': typeof DashboardRoute
   '/denuncias': typeof DenunciasRoute
   '/documentos': typeof DocumentosRoute
   '/epi': typeof EpiRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/cadastro'
+    | '/dashboard'
     | '/denuncias'
     | '/documentos'
     | '/epi'
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/cadastro'
+    | '/dashboard'
     | '/denuncias'
     | '/documentos'
     | '/epi'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/cadastro'
+    | '/dashboard'
     | '/denuncias'
     | '/documentos'
     | '/epi'
@@ -150,6 +162,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CadastroRoute: typeof CadastroRoute
+  DashboardRoute: typeof DashboardRoute
   DenunciasRoute: typeof DenunciasRoute
   DocumentosRoute: typeof DocumentosRoute
   EpiRoute: typeof EpiRoute
@@ -218,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DenunciasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cadastro': {
       id: '/cadastro'
       path: '/cadastro'
@@ -238,6 +258,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CadastroRoute: CadastroRoute,
+  DashboardRoute: DashboardRoute,
   DenunciasRoute: DenunciasRoute,
   DocumentosRoute: DocumentosRoute,
   EpiRoute: EpiRoute,
@@ -250,3 +271,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
