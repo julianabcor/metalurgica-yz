@@ -10,15 +10,23 @@ import {
   LogOut,
   Building2,
   Info,
+  Megaphone,
+  UserCog,
+  Map,
+  GraduationCap,
 } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
 import { useAuth } from "@/lib/auth";
 
 const nav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/comunicados", label: "Comunicados", icon: Megaphone },
+  { to: "/rh", label: "Meu RH", icon: UserCog },
   { to: "/pedidos", label: "Pedidos", icon: Package },
   { to: "/suporte", label: "Suporte", icon: LifeBuoy },
   { to: "/maquinas", label: "Máquinas", icon: Activity },
+  { to: "/mapa", label: "Mapa da empresa", icon: Map },
+  { to: "/treinamentos", label: "Treinamentos", icon: GraduationCap },
   { to: "/epi", label: "EPI", icon: HardHat },
   { to: "/documentos", label: "Documentos", icon: FileText },
   { to: "/denuncias", label: "Denúncias", icon: ShieldAlert },
