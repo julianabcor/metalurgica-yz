@@ -1,4 +1,4 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import {
   LayoutDashboard,
   Package,
@@ -11,7 +11,8 @@ import {
   Building2,
   Info,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
+import { useAuth } from "@/lib/auth";
 
 const nav = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -26,6 +27,25 @@ const nav = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const { user, ready, logout } = useAuth();
+
+  useEffect(() => {
+    if (ready && !user) navigate({ to: "/login" });
+  }, [ready, user, navigate]);
+
+  if (!ready || !user) {
+    return <div className="min-h-screen bg-canvas" />;
+  }
+
+  const initials = user.name
+    .split(" ")
+    .map((p) => p[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
   return (
     <div className="flex min-h-screen bg-canvas">
       <aside className="w-60 shrink-0 bg-sidebar text-sidebar-foreground flex flex-col">
@@ -64,11 +84,17 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="border-t border-white/10 p-3 space-y-2">
           <div className="flex items-center gap-2 px-2 py-2">
             <div className="h-8 w-8 rounded-full bg-sidebar-accent grid place-items-center text-xs">
-              JB
+              {initials || "U"}
             </div>
-            <div className="text-xs truncate">julianabcor08@gmail.com</div>
+            <div className="text-xs truncate">{user.email}</div>
           </div>
-          <button className="w-full flex items-center gap-2 rounded-md px-3 py-2 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-white">
+          <button
+            onClick={() => {
+              logout();
+              navigate({ to: "/login" });
+            }}
+            className="w-full flex items-center gap-2 rounded-md px-3 py-2 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-white"
+          >
             <LogOut className="h-4 w-4" /> Sair
           </button>
         </div>
