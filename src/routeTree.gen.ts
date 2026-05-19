@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SuporteRouteImport } from './routes/suporte'
+import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as PedidosRouteImport } from './routes/pedidos'
 import { Route as MaquinasRouteImport } from './routes/maquinas'
 import { Route as EpiRouteImport } from './routes/epi'
@@ -20,6 +21,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const SuporteRoute = SuporteRouteImport.update({
   id: '/suporte',
   path: '/suporte',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SobreRoute = SobreRouteImport.update({
+  id: '/sobre',
+  path: '/sobre',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PedidosRoute = PedidosRouteImport.update({
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/epi': typeof EpiRoute
   '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
+  '/sobre': typeof SobreRoute
   '/suporte': typeof SuporteRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/epi': typeof EpiRoute
   '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
+  '/sobre': typeof SobreRoute
   '/suporte': typeof SuporteRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/epi': typeof EpiRoute
   '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
+  '/sobre': typeof SobreRoute
   '/suporte': typeof SuporteRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/epi'
     | '/maquinas'
     | '/pedidos'
+    | '/sobre'
     | '/suporte'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/epi'
     | '/maquinas'
     | '/pedidos'
+    | '/sobre'
     | '/suporte'
   id:
     | '__root__'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/epi'
     | '/maquinas'
     | '/pedidos'
+    | '/sobre'
     | '/suporte'
   fileRoutesById: FileRoutesById
 }
@@ -118,6 +130,7 @@ export interface RootRouteChildren {
   EpiRoute: typeof EpiRoute
   MaquinasRoute: typeof MaquinasRoute
   PedidosRoute: typeof PedidosRoute
+  SobreRoute: typeof SobreRoute
   SuporteRoute: typeof SuporteRoute
 }
 
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/suporte'
       fullPath: '/suporte'
       preLoaderRoute: typeof SuporteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sobre': {
+      id: '/sobre'
+      path: '/sobre'
+      fullPath: '/sobre'
+      preLoaderRoute: typeof SobreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pedidos': {
@@ -182,6 +202,7 @@ const rootRouteChildren: RootRouteChildren = {
   EpiRoute: EpiRoute,
   MaquinasRoute: MaquinasRoute,
   PedidosRoute: PedidosRoute,
+  SobreRoute: SobreRoute,
   SuporteRoute: SuporteRoute,
 }
 export const routeTree = rootRouteImport
