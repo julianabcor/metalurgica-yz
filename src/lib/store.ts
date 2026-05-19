@@ -95,6 +95,9 @@ function emitRefresh() {
   if (typeof window !== "undefined") window.dispatchEvent(new Event(REFRESH_EVT));
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const db = supabase as any;
+
 export function useStore<K extends keyof Schema>(key: K) {
   const [items, setItems] = useState<Schema[K]>([] as unknown as Schema[K]);
 
