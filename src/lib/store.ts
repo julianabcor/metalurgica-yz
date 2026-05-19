@@ -104,7 +104,7 @@ export function useStore<K extends keyof Schema>(key: K) {
   const load = useCallback(async () => {
     const { data: sess } = await supabase.auth.getSession();
     if (!sess.session) { setItems([] as unknown as Schema[K]); return; }
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from(TABLES[key])
       .select("*")
       .order("created_at", { ascending: false });
