@@ -1,78 +1,50 @@
 import { useEffect, useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import type { Session } from "@supabase/supabase-js";
 
-export type User = { name: string; email: string };
-type StoredUser = User & { password: string };
+export type User = { name: string; email: string; id: string };
 
-const USERS_KEY = "myz-users-v1";
-const SESSION_KEY = "myz-session-v1";
-const EVT = "myz-auth";
-
-function readUsers(): StoredUser[] {
-  if (typeof window === "undefined") return [];
-  try {
-    return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
-
-function writeUsers(list: StoredUser[]) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(list));
-}
-
-function readSession(): User | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem(SESSION_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
+function fromSession(session: Session | null): User | null {
+  if (!session?.user) return null;
+  const u = session.user;
+  const nome = (u.user_metadata?.nome as string | undefined) ?? u.email ?? "";
+  return { id: u.id, email: u.email ?? "", name: nome };
 }
 
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(() => readSession());
+  const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setUser(readSession());
-    setReady(true);
-    const sync = () => setUser(readSession());
-    window.addEventListener(EVT, sync);
-    window.addEventListener("storage", sync);
-    return () => {
-      window.removeEventListener(EVT, sync);
-      window.removeEventListener("storage", sync);
-    };
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      setUser(fromSession(session));
+    });
+    supabase.auth.getSession().then(({ data }) => {
+      setUser(fromSession(data.session));
+      setReady(true);
+    });
+    return () => subscription.unsubscribe();
   }, []);
 
-  const login = useCallback((email: string, password: string) => {
-    const u = readUsers().find(
-      (x) => x.email.toLowerCase() === email.toLowerCase() && x.password === password,
-    );
-    if (!u) throw new Error("E-mail ou senha incorretos.");
-    const sess: User = { name: u.name, email: u.email };
-    localStorage.setItem(SESSION_KEY, JSON.stringify(sess));
-    window.dispatchEvent(new Event(EVT));
-    return sess;
+  const login = useCallback(async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw new Error(error.message);
   }, []);
 
-  const register = useCallback((name: string, email: string, password: string) => {
-    const users = readUsers();
-    if (users.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
-      throw new Error("Este e-mail já está cadastrado.");
-    }
-    users.push({ name, email, password });
-    writeUsers(users);
-    const sess: User = { name, email };
-    localStorage.setItem(SESSION_KEY, JSON.stringify(sess));
-    window.dispatchEvent(new Event(EVT));
-    return sess;
+  const register = useCallback(async (name: string, email: string, password: string) => {
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { nome: name },
+        emailRedirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
+    if (error) throw new Error(error.message);
   }, []);
 
-  const logout = useCallback(() => {
-    localStorage.removeItem(SESSION_KEY);
-    window.dispatchEvent(new Event(EVT));
+  const logout = useCallback(async () => {
+    await supabase.auth.signOut();
   }, []);
 
   return { user, ready, login, register, logout };
