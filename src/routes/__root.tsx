@@ -75,10 +75,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Metalúrgica YZ — Portal interno" },
       { name: "description", content: "Portal interno da Metalúrgica YZ" },
       { name: "author", content: "Metalúrgica YZ" },
-      { property: "og:title", content: "Metalúrgica YZ" },
+      { property: "og:title", content: "Metalúrgica YZ — Portal interno" },
       { property: "og:description", content: "Portal interno da Metalúrgica YZ" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Metalúrgica YZ — Portal interno" },
+      { name: "twitter:description", content: "Portal interno da Metalúrgica YZ" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6d5dae1b-eb5e-48bc-a3fd-fe0e1a545660/id-preview-50138ff3--1a782d3d-a63b-47de-abe5-1ff69b1f3032.lovable.app-1779227460343.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6d5dae1b-eb5e-48bc-a3fd-fe0e1a545660/id-preview-50138ff3--1a782d3d-a63b-47de-abe5-1ff69b1f3032.lovable.app-1779227460343.png" },
     ],
     links: [
       {
