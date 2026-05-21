@@ -53,18 +53,24 @@ export function useAuth() {
     return uid ? await fetchRole(uid) : ("operador" as Role);
   }, []);
 
-  const register = useCallback(async (name: string, email: string, password: string, r: Role = "operador") => {
+  const register = useCallback(async (name: string, email: string, password: string) => {
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { nome: name, role: r },
-        emailRedirectTo: `${window.location.origin}/${r === "gestor" ? "gestao" : "dashboard"}`,
+        data: { nome: name },
+        emailRedirectTo: `${window.location.origin}/dashboard`,
       },
     });
     if (error) throw new Error(error.message);
-    return r;
   }, []);
+
+  const refreshRole = useCallback(async () => {
+    if (!user) return null;
+    const r = await fetchRole(user.id);
+    setRole(r);
+    return r;
+  }, [user]);
 
   const logout = useCallback(async () => {
     await supabase.auth.signOut();
