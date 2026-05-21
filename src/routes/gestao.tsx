@@ -157,7 +157,44 @@ function GestaoPage() {
           })}
         </div>
 
-        {/* List */}
+        {tab === "powerbi" ? (
+          <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {POWER_BI_PANELS.map((p) => (
+              <div
+                key={p.title}
+                className="rounded-xl border border-white/10 bg-white/5 backdrop-blur overflow-hidden"
+              >
+                <div className="px-5 py-3 border-b border-white/10 flex items-center justify-between">
+                  <div>
+                    <div className="text-sm font-semibold">{p.title}</div>
+                    <div className="text-[11px] text-white/60">{p.subtitle}</div>
+                  </div>
+                  <BarChart3 className="h-4 w-4 text-white/60" />
+                </div>
+                <div className="aspect-video bg-black/30">
+                  {p.url ? (
+                    <iframe
+                      title={p.title}
+                      src={p.url}
+                      className="w-full h-full"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <div className="w-full h-full grid place-items-center text-center px-6">
+                      <div>
+                        <BarChart3 className="h-8 w-8 mx-auto text-white/40 mb-2" />
+                        <div className="text-sm text-white/70">Painel Power BI não configurado</div>
+                        <div className="text-[11px] text-white/50 mt-1">
+                          Cole a URL "Publicar na Web" do Power BI em <code className="text-white/70">POWER_BI_PANELS</code>.
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
         <div className="mt-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur overflow-hidden">
           <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
             <div className="text-sm font-semibold flex items-center gap-2">
@@ -205,6 +242,7 @@ function GestaoPage() {
             </ul>
           )}
         </div>
+        )}
       </main>
     </div>
   );
