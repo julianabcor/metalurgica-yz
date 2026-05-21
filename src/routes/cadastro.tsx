@@ -88,6 +88,25 @@ function RegisterPage() {
               />
             </div>
             <div>
+              <label className="text-sm font-semibold text-[#0a2a6c]">Tipo de conta</label>
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                {(["operador", "gestor"] as Role[]).map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setRole(r)}
+                    className={`rounded-md border px-3 py-2 text-sm font-medium capitalize transition-colors ${
+                      role === r
+                        ? "border-[#0a2a6c] bg-[#0a2a6c] text-white"
+                        : "border-input bg-background text-[#0a2a6c] hover:bg-[#0a2a6c]/5"
+                    }`}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
               <label className="text-sm font-semibold text-[#0a2a6c]">Email</label>
               <input
                 type="email"
