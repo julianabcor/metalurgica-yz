@@ -1,20 +1,24 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { useAuth, type Role } from "@/lib/auth";
+import { useServerFn } from "@tanstack/react-start";
+import { useAuth } from "@/lib/auth";
+import { claimGestorRole } from "@/lib/roles.functions";
 
 export const Route = createFileRoute("/cadastro")({
   component: RegisterPage,
 });
 
 function RegisterPage() {
-  const { register, user, ready } = useAuth();
+  const { register, refreshRole, user, ready } = useAuth();
+  const claimGestor = useServerFn(claimGestorRole);
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<Role>("operador");
+  const [inviteCode, setInviteCode] = useState("");
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (ready && user) navigate({ to: "/dashboard" });
@@ -24,11 +28,26 @@ function RegisterPage() {
     e.preventDefault();
     setError("");
     if (password.length < 6) return setError("A senha deve ter pelo menos 6 caracteres.");
+    setSubmitting(true);
     try {
-      const r = await register(name.trim(), email.trim(), password, role);
-      navigate({ to: r === "gestor" ? "/gestao" : "/dashboard" });
+      await register(name.trim(), email.trim(), password);
+      let target: "/gestao" | "/dashboard" = "/dashboard";
+      if (inviteCode.trim()) {
+        try {
+          await claimGestor({ data: { code: inviteCode.trim() } });
+          const r = await refreshRole();
+          if (r === "gestor") target = "/gestao";
+        } catch (err) {
+          setError(`Cadastro criado, mas código de gestor inválido: ${(err as Error).message}`);
+          setSubmitting(false);
+          return;
+        }
+      }
+      navigate({ to: target });
     } catch (err) {
       setError((err as Error).message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -88,25 +107,6 @@ function RegisterPage() {
               />
             </div>
             <div>
-              <label className="text-sm font-semibold text-[#0a2a6c]">Tipo de conta</label>
-              <div className="mt-2 grid grid-cols-2 gap-2">
-                {(["operador", "gestor"] as Role[]).map((r) => (
-                  <button
-                    key={r}
-                    type="button"
-                    onClick={() => setRole(r)}
-                    className={`rounded-md border px-3 py-2 text-sm font-medium capitalize transition-colors ${
-                      role === r
-                        ? "border-[#0a2a6c] bg-[#0a2a6c] text-white"
-                        : "border-input bg-background text-[#0a2a6c] hover:bg-[#0a2a6c]/5"
-                    }`}
-                  >
-                    {r}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>
               <label className="text-sm font-semibold text-[#0a2a6c]">Email</label>
               <input
                 type="email"
@@ -126,12 +126,28 @@ function RegisterPage() {
                 className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a2a6c]/30"
               />
             </div>
+            <div>
+              <label className="text-sm font-semibold text-[#0a2a6c]">
+                Código de gestor <span className="font-normal text-muted-foreground">(opcional)</span>
+              </label>
+              <input
+                type="password"
+                value={inviteCode}
+                onChange={(e) => setInviteCode(e.target.value)}
+                placeholder="Deixe em branco para conta de operador"
+                className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a2a6c]/30"
+              />
+              <p className="text-[11px] text-muted-foreground mt-1">
+                Somente quem possui o código fornecido pela diretoria pode criar contas de gestão.
+              </p>
+            </div>
             {error && <p className="text-xs text-rose-600">{error}</p>}
             <button
               type="submit"
-              className="w-full rounded-md bg-[#0a2a6c] hover:bg-[#0a2a6c]/90 text-white py-2.5 text-sm font-medium"
+              disabled={submitting}
+              className="w-full rounded-md bg-[#0a2a6c] hover:bg-[#0a2a6c]/90 disabled:opacity-60 text-white py-2.5 text-sm font-medium"
             >
-              Criar conta
+              {submitting ? "Criando..." : "Criar conta"}
             </button>
           </form>
 
