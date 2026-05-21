@@ -36,13 +36,15 @@ const nav = [
 export function AppShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { user, ready, logout } = useAuth();
+  const { user, ready, role, logout } = useAuth();
 
   useEffect(() => {
-    if (ready && !user) navigate({ to: "/login" });
-  }, [ready, user, navigate]);
+    if (!ready) return;
+    if (!user) navigate({ to: "/login" });
+    else if (role === "gestor") navigate({ to: "/gestao" });
+  }, [ready, user, role, navigate]);
 
-  if (!ready || !user) {
+  if (!ready || !user || role === "gestor") {
     return <div className="min-h-screen bg-canvas" />;
   }
 
