@@ -86,7 +86,7 @@ function GestaoPage() {
   }
 
   const currentTab = TABS.find((t) => t.key === tab)!;
-  const counts: Record<TabKey, number> = { pedidos: 0, chamados: 0, epis: 0, denuncias: 0 };
+  const counts: Record<TabKey, number> = { pedidos: 0, chamados: 0, epis: 0, denuncias: 0, powerbi: 0 };
   counts[tab] = rows.length;
 
   return (
