@@ -21,8 +21,8 @@ function LoginPage() {
     e.preventDefault();
     setError("");
     try {
-      await login(email.trim(), password);
-      navigate({ to: "/dashboard" });
+      const r = await login(email.trim(), password);
+      navigate({ to: r === "gestor" ? "/gestao" : "/dashboard" });
     } catch (err) {
       setError((err as Error).message);
     }
