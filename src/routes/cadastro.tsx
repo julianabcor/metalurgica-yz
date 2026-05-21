@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { useAuth } from "@/lib/auth";
+import { useAuth, type Role } from "@/lib/auth";
 
 export const Route = createFileRoute("/cadastro")({
   component: RegisterPage,
@@ -13,6 +13,7 @@ function RegisterPage() {
   const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState<Role>("operador");
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -24,14 +25,14 @@ function RegisterPage() {
     setError("");
     if (password.length < 6) return setError("A senha deve ter pelo menos 6 caracteres.");
     try {
-      await register(name.trim(), email.trim(), password);
-      navigate({ to: "/dashboard" });
+      const r = await register(name.trim(), email.trim(), password, role);
+      navigate({ to: r === "gestor" ? "/gestao" : "/dashboard" });
     } catch (err) {
       setError((err as Error).message);
     }
   };
 
-  void company; // capturado mas não usado na auth local
+  void company;
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
@@ -85,6 +86,25 @@ function RegisterPage() {
                 onChange={(e) => setCompany(e.target.value)}
                 className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a2a6c]/30"
               />
+            </div>
+            <div>
+              <label className="text-sm font-semibold text-[#0a2a6c]">Tipo de conta</label>
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                {(["operador", "gestor"] as Role[]).map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setRole(r)}
+                    className={`rounded-md border px-3 py-2 text-sm font-medium capitalize transition-colors ${
+                      role === r
+                        ? "border-[#0a2a6c] bg-[#0a2a6c] text-white"
+                        : "border-input bg-background text-[#0a2a6c] hover:bg-[#0a2a6c]/5"
+                    }`}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
             </div>
             <div>
               <label className="text-sm font-semibold text-[#0a2a6c]">Email</label>
