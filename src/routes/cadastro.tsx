@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { useAuth } from "@/lib/auth";
+import { useAuth, type Role } from "@/lib/auth";
 
 export const Route = createFileRoute("/cadastro")({
   component: RegisterPage,
@@ -13,6 +13,7 @@ function RegisterPage() {
   const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState<Role>("operador");
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -24,14 +25,14 @@ function RegisterPage() {
     setError("");
     if (password.length < 6) return setError("A senha deve ter pelo menos 6 caracteres.");
     try {
-      await register(name.trim(), email.trim(), password);
-      navigate({ to: "/dashboard" });
+      const r = await register(name.trim(), email.trim(), password, role);
+      navigate({ to: r === "gestor" ? "/gestao" : "/dashboard" });
     } catch (err) {
       setError((err as Error).message);
     }
   };
 
-  void company; // capturado mas não usado na auth local
+  void company;
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
