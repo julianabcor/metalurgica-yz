@@ -10,6 +10,7 @@ import {
   HardHat,
   ShieldAlert,
   RefreshCw,
+  BarChart3,
 } from "lucide-react";
 
 export const Route = createFileRoute("/gestao")({ component: GestaoPage });
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/gestao")({ component: GestaoPage });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const db = supabase as any;
 
-type TabKey = "pedidos" | "chamados" | "epis" | "denuncias";
+type TabKey = "pedidos" | "chamados" | "epis" | "denuncias" | "powerbi";
 
 type Row = Record<string, unknown> & {
   id: string;
@@ -32,6 +33,14 @@ const TABS: { key: TabKey; label: string; icon: React.ComponentType<{ className?
   { key: "chamados", label: "Chamados", icon: LifeBuoy, statuses: ["Aberto", "Em análise", "Resolvido"] },
   { key: "epis", label: "EPI", icon: HardHat, statuses: ["Pendente", "Aprovado", "Entregue"] },
   { key: "denuncias", label: "Denúncias", icon: ShieldAlert },
+  { key: "powerbi", label: "Power BI", icon: BarChart3 },
+];
+
+const POWER_BI_PANELS: { title: string; subtitle: string; url: string }[] = [
+  { title: "Produção", subtitle: "Volume, OEE e paradas", url: "" },
+  { title: "Vendas & Pedidos", subtitle: "Carteira, faturamento e mix", url: "" },
+  { title: "Qualidade", subtitle: "Refugo, retrabalho e PPM", url: "" },
+  { title: "RH & Segurança", subtitle: "Absenteísmo, acidentes e EPI", url: "" },
 ];
 
 function GestaoPage() {
