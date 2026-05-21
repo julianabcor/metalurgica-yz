@@ -58,6 +58,7 @@ function GestaoPage() {
 
   const load = useCallback(async () => {
     if (role !== "gestor") return;
+    if (tab === "powerbi") { setRows([]); return; }
     setLoading(true);
     const { data, error } = await db.from(tab).select("*").order("created_at", { ascending: false });
     if (error) { console.error(error); setLoading(false); return; }
