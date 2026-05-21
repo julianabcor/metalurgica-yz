@@ -173,8 +173,10 @@ function GestaoPage() {
                   <div className="min-w-0 flex-1">
                     <RowSummary tab={tab} row={r} />
                     <div className="mt-1 text-xs text-white/60">
-                      Solicitante: <span className="text-white/80">{r._autor}</span> ·{" "}
-                      {new Date(r.created_at).toLocaleString("pt-BR")}
+                      {tab === "denuncias" && r.anonima
+                        ? <>Solicitante: <span className="text-white/80">Anônimo</span></>
+                        : <>Solicitante: <span className="text-white/80">{r._autor}</span></>}
+                      {" · "}{new Date(r.created_at).toLocaleString("pt-BR")}
                     </div>
                   </div>
                   {currentTab.statuses && (

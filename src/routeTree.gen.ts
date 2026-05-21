@@ -17,6 +17,7 @@ import { Route as PedidosRouteImport } from './routes/pedidos'
 import { Route as MaquinasRouteImport } from './routes/maquinas'
 import { Route as MapaRouteImport } from './routes/mapa'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as GestaoRouteImport } from './routes/gestao'
 import { Route as EpiRouteImport } from './routes/epi'
 import { Route as DocumentosRouteImport } from './routes/documentos'
 import { Route as DenunciasRouteImport } from './routes/denuncias'
@@ -65,6 +66,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GestaoRoute = GestaoRouteImport.update({
+  id: '/gestao',
+  path: '/gestao',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EpiRoute = EpiRouteImport.update({
   id: '/epi',
   path: '/epi',
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/denuncias': typeof DenunciasRoute
   '/documentos': typeof DocumentosRoute
   '/epi': typeof EpiRoute
+  '/gestao': typeof GestaoRoute
   '/login': typeof LoginRoute
   '/mapa': typeof MapaRoute
   '/maquinas': typeof MaquinasRoute
@@ -126,6 +133,7 @@ export interface FileRoutesByTo {
   '/denuncias': typeof DenunciasRoute
   '/documentos': typeof DocumentosRoute
   '/epi': typeof EpiRoute
+  '/gestao': typeof GestaoRoute
   '/login': typeof LoginRoute
   '/mapa': typeof MapaRoute
   '/maquinas': typeof MaquinasRoute
@@ -144,6 +152,7 @@ export interface FileRoutesById {
   '/denuncias': typeof DenunciasRoute
   '/documentos': typeof DocumentosRoute
   '/epi': typeof EpiRoute
+  '/gestao': typeof GestaoRoute
   '/login': typeof LoginRoute
   '/mapa': typeof MapaRoute
   '/maquinas': typeof MaquinasRoute
@@ -163,6 +172,7 @@ export interface FileRouteTypes {
     | '/denuncias'
     | '/documentos'
     | '/epi'
+    | '/gestao'
     | '/login'
     | '/mapa'
     | '/maquinas'
@@ -180,6 +190,7 @@ export interface FileRouteTypes {
     | '/denuncias'
     | '/documentos'
     | '/epi'
+    | '/gestao'
     | '/login'
     | '/mapa'
     | '/maquinas'
@@ -197,6 +208,7 @@ export interface FileRouteTypes {
     | '/denuncias'
     | '/documentos'
     | '/epi'
+    | '/gestao'
     | '/login'
     | '/mapa'
     | '/maquinas'
@@ -215,6 +227,7 @@ export interface RootRouteChildren {
   DenunciasRoute: typeof DenunciasRoute
   DocumentosRoute: typeof DocumentosRoute
   EpiRoute: typeof EpiRoute
+  GestaoRoute: typeof GestaoRoute
   LoginRoute: typeof LoginRoute
   MapaRoute: typeof MapaRoute
   MaquinasRoute: typeof MaquinasRoute
@@ -283,6 +296,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/gestao': {
+      id: '/gestao'
+      path: '/gestao'
+      fullPath: '/gestao'
+      preLoaderRoute: typeof GestaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/epi': {
       id: '/epi'
       path: '/epi'
@@ -343,6 +363,7 @@ const rootRouteChildren: RootRouteChildren = {
   DenunciasRoute: DenunciasRoute,
   DocumentosRoute: DocumentosRoute,
   EpiRoute: EpiRoute,
+  GestaoRoute: GestaoRoute,
   LoginRoute: LoginRoute,
   MapaRoute: MapaRoute,
   MaquinasRoute: MaquinasRoute,
