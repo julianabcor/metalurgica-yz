@@ -10,6 +10,7 @@ import {
   HardHat,
   ShieldAlert,
   RefreshCw,
+  BarChart3,
 } from "lucide-react";
 
 export const Route = createFileRoute("/gestao")({ component: GestaoPage });
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/gestao")({ component: GestaoPage });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const db = supabase as any;
 
-type TabKey = "pedidos" | "chamados" | "epis" | "denuncias";
+type TabKey = "pedidos" | "chamados" | "epis" | "denuncias" | "powerbi";
 
 type Row = Record<string, unknown> & {
   id: string;
@@ -32,6 +33,14 @@ const TABS: { key: TabKey; label: string; icon: React.ComponentType<{ className?
   { key: "chamados", label: "Chamados", icon: LifeBuoy, statuses: ["Aberto", "Em análise", "Resolvido"] },
   { key: "epis", label: "EPI", icon: HardHat, statuses: ["Pendente", "Aprovado", "Entregue"] },
   { key: "denuncias", label: "Denúncias", icon: ShieldAlert },
+  { key: "powerbi", label: "Power BI", icon: BarChart3 },
+];
+
+const POWER_BI_PANELS: { title: string; subtitle: string; url: string }[] = [
+  { title: "Produção", subtitle: "Volume, OEE e paradas", url: "" },
+  { title: "Vendas & Pedidos", subtitle: "Carteira, faturamento e mix", url: "" },
+  { title: "Qualidade", subtitle: "Refugo, retrabalho e PPM", url: "" },
+  { title: "RH & Segurança", subtitle: "Absenteísmo, acidentes e EPI", url: "" },
 ];
 
 function GestaoPage() {
@@ -49,6 +58,7 @@ function GestaoPage() {
 
   const load = useCallback(async () => {
     if (role !== "gestor") return;
+    if (tab === "powerbi") { setRows([]); return; }
     setLoading(true);
     const { data, error } = await db.from(tab).select("*").order("created_at", { ascending: false });
     if (error) { console.error(error); setLoading(false); return; }
@@ -76,7 +86,7 @@ function GestaoPage() {
   }
 
   const currentTab = TABS.find((t) => t.key === tab)!;
-  const counts: Record<TabKey, number> = { pedidos: 0, chamados: 0, epis: 0, denuncias: 0 };
+  const counts: Record<TabKey, number> = { pedidos: 0, chamados: 0, epis: 0, denuncias: 0, powerbi: 0 };
   counts[tab] = rows.length;
 
   return (
@@ -121,7 +131,7 @@ function GestaoPage() {
         </p>
 
         {/* Tabs */}
-        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-3">
           {TABS.map((t) => {
             const Icon = t.icon;
             const active = tab === t.key;
@@ -147,7 +157,44 @@ function GestaoPage() {
           })}
         </div>
 
-        {/* List */}
+        {tab === "powerbi" ? (
+          <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {POWER_BI_PANELS.map((p) => (
+              <div
+                key={p.title}
+                className="rounded-xl border border-white/10 bg-white/5 backdrop-blur overflow-hidden"
+              >
+                <div className="px-5 py-3 border-b border-white/10 flex items-center justify-between">
+                  <div>
+                    <div className="text-sm font-semibold">{p.title}</div>
+                    <div className="text-[11px] text-white/60">{p.subtitle}</div>
+                  </div>
+                  <BarChart3 className="h-4 w-4 text-white/60" />
+                </div>
+                <div className="aspect-video bg-black/30">
+                  {p.url ? (
+                    <iframe
+                      title={p.title}
+                      src={p.url}
+                      className="w-full h-full"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <div className="w-full h-full grid place-items-center text-center px-6">
+                      <div>
+                        <BarChart3 className="h-8 w-8 mx-auto text-white/40 mb-2" />
+                        <div className="text-sm text-white/70">Painel Power BI não configurado</div>
+                        <div className="text-[11px] text-white/50 mt-1">
+                          Cole a URL "Publicar na Web" do Power BI em <code className="text-white/70">POWER_BI_PANELS</code>.
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
         <div className="mt-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur overflow-hidden">
           <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
             <div className="text-sm font-semibold flex items-center gap-2">
@@ -195,6 +242,7 @@ function GestaoPage() {
             </ul>
           )}
         </div>
+        )}
       </main>
     </div>
   );
