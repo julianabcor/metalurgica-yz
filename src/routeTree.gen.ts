@@ -13,11 +13,13 @@ import { Route as TreinamentosRouteImport } from './routes/treinamentos'
 import { Route as SuporteRouteImport } from './routes/suporte'
 import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as RhRouteImport } from './routes/rh'
+import { Route as RedefinirSenhaRouteImport } from './routes/redefinir-senha'
 import { Route as PedidosRouteImport } from './routes/pedidos'
 import { Route as MaquinasRouteImport } from './routes/maquinas'
 import { Route as MapaRouteImport } from './routes/mapa'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GestaoRouteImport } from './routes/gestao'
+import { Route as EsqueciSenhaRouteImport } from './routes/esqueci-senha'
 import { Route as EpiRouteImport } from './routes/epi'
 import { Route as DocumentosRouteImport } from './routes/documentos'
 import { Route as DenunciasRouteImport } from './routes/denuncias'
@@ -46,6 +48,11 @@ const RhRoute = RhRouteImport.update({
   path: '/rh',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RedefinirSenhaRoute = RedefinirSenhaRouteImport.update({
+  id: '/redefinir-senha',
+  path: '/redefinir-senha',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PedidosRoute = PedidosRouteImport.update({
   id: '/pedidos',
   path: '/pedidos',
@@ -69,6 +76,11 @@ const LoginRoute = LoginRouteImport.update({
 const GestaoRoute = GestaoRouteImport.update({
   id: '/gestao',
   path: '/gestao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EsqueciSenhaRoute = EsqueciSenhaRouteImport.update({
+  id: '/esqueci-senha',
+  path: '/esqueci-senha',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EpiRoute = EpiRouteImport.update({
@@ -115,11 +127,13 @@ export interface FileRoutesByFullPath {
   '/denuncias': typeof DenunciasRoute
   '/documentos': typeof DocumentosRoute
   '/epi': typeof EpiRoute
+  '/esqueci-senha': typeof EsqueciSenhaRoute
   '/gestao': typeof GestaoRoute
   '/login': typeof LoginRoute
   '/mapa': typeof MapaRoute
   '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
   '/rh': typeof RhRoute
   '/sobre': typeof SobreRoute
   '/suporte': typeof SuporteRoute
@@ -133,11 +147,13 @@ export interface FileRoutesByTo {
   '/denuncias': typeof DenunciasRoute
   '/documentos': typeof DocumentosRoute
   '/epi': typeof EpiRoute
+  '/esqueci-senha': typeof EsqueciSenhaRoute
   '/gestao': typeof GestaoRoute
   '/login': typeof LoginRoute
   '/mapa': typeof MapaRoute
   '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
   '/rh': typeof RhRoute
   '/sobre': typeof SobreRoute
   '/suporte': typeof SuporteRoute
@@ -152,11 +168,13 @@ export interface FileRoutesById {
   '/denuncias': typeof DenunciasRoute
   '/documentos': typeof DocumentosRoute
   '/epi': typeof EpiRoute
+  '/esqueci-senha': typeof EsqueciSenhaRoute
   '/gestao': typeof GestaoRoute
   '/login': typeof LoginRoute
   '/mapa': typeof MapaRoute
   '/maquinas': typeof MaquinasRoute
   '/pedidos': typeof PedidosRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
   '/rh': typeof RhRoute
   '/sobre': typeof SobreRoute
   '/suporte': typeof SuporteRoute
@@ -172,11 +190,13 @@ export interface FileRouteTypes {
     | '/denuncias'
     | '/documentos'
     | '/epi'
+    | '/esqueci-senha'
     | '/gestao'
     | '/login'
     | '/mapa'
     | '/maquinas'
     | '/pedidos'
+    | '/redefinir-senha'
     | '/rh'
     | '/sobre'
     | '/suporte'
@@ -190,11 +210,13 @@ export interface FileRouteTypes {
     | '/denuncias'
     | '/documentos'
     | '/epi'
+    | '/esqueci-senha'
     | '/gestao'
     | '/login'
     | '/mapa'
     | '/maquinas'
     | '/pedidos'
+    | '/redefinir-senha'
     | '/rh'
     | '/sobre'
     | '/suporte'
@@ -208,11 +230,13 @@ export interface FileRouteTypes {
     | '/denuncias'
     | '/documentos'
     | '/epi'
+    | '/esqueci-senha'
     | '/gestao'
     | '/login'
     | '/mapa'
     | '/maquinas'
     | '/pedidos'
+    | '/redefinir-senha'
     | '/rh'
     | '/sobre'
     | '/suporte'
@@ -227,11 +251,13 @@ export interface RootRouteChildren {
   DenunciasRoute: typeof DenunciasRoute
   DocumentosRoute: typeof DocumentosRoute
   EpiRoute: typeof EpiRoute
+  EsqueciSenhaRoute: typeof EsqueciSenhaRoute
   GestaoRoute: typeof GestaoRoute
   LoginRoute: typeof LoginRoute
   MapaRoute: typeof MapaRoute
   MaquinasRoute: typeof MaquinasRoute
   PedidosRoute: typeof PedidosRoute
+  RedefinirSenhaRoute: typeof RedefinirSenhaRoute
   RhRoute: typeof RhRoute
   SobreRoute: typeof SobreRoute
   SuporteRoute: typeof SuporteRoute
@@ -268,6 +294,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RhRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/redefinir-senha': {
+      id: '/redefinir-senha'
+      path: '/redefinir-senha'
+      fullPath: '/redefinir-senha'
+      preLoaderRoute: typeof RedefinirSenhaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pedidos': {
       id: '/pedidos'
       path: '/pedidos'
@@ -301,6 +334,13 @@ declare module '@tanstack/react-router' {
       path: '/gestao'
       fullPath: '/gestao'
       preLoaderRoute: typeof GestaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/esqueci-senha': {
+      id: '/esqueci-senha'
+      path: '/esqueci-senha'
+      fullPath: '/esqueci-senha'
+      preLoaderRoute: typeof EsqueciSenhaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/epi': {
@@ -363,11 +403,13 @@ const rootRouteChildren: RootRouteChildren = {
   DenunciasRoute: DenunciasRoute,
   DocumentosRoute: DocumentosRoute,
   EpiRoute: EpiRoute,
+  EsqueciSenhaRoute: EsqueciSenhaRoute,
   GestaoRoute: GestaoRoute,
   LoginRoute: LoginRoute,
   MapaRoute: MapaRoute,
   MaquinasRoute: MaquinasRoute,
   PedidosRoute: PedidosRoute,
+  RedefinirSenhaRoute: RedefinirSenhaRoute,
   RhRoute: RhRoute,
   SobreRoute: SobreRoute,
   SuporteRoute: SuporteRoute,
