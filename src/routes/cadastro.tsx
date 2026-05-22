@@ -13,10 +13,11 @@ function RegisterPage() {
   const claimGestor = useServerFn(claimGestorRole);
   const navigate = useNavigate();
   const [name, setName] = useState("");
-  const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [inviteCode, setInviteCode] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showInviteCode, setShowInviteCode] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -50,8 +51,6 @@ function RegisterPage() {
       setSubmitting(false);
     }
   };
-
-  void company;
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
@@ -99,14 +98,6 @@ function RegisterPage() {
               />
             </div>
             <div>
-              <label className="text-sm font-semibold text-[#0a2a6c]">Empresa (opcional)</label>
-              <input
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-                className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a2a6c]/30"
-              />
-            </div>
-            <div>
               <label className="text-sm font-semibold text-[#0a2a6c]">Email</label>
               <input
                 type="email"
@@ -118,25 +109,45 @@ function RegisterPage() {
             </div>
             <div>
               <label className="text-sm font-semibold text-[#0a2a6c]">Senha (mín. 6 caracteres)</label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a2a6c]/30"
-              />
+              <div className="relative mt-2">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2.5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a2a6c]/30"
+                />
+                <button
+                  type="button"
+                  aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute inset-y-0 right-0 grid w-11 place-items-center text-[#0a2a6c] hover:bg-[#0a2a6c]/5"
+                >
+                  {showPassword ? "🙈" : "👁️"}
+                </button>
+              </div>
             </div>
             <div>
               <label className="text-sm font-semibold text-[#0a2a6c]">
                 Código de gestor <span className="font-normal text-muted-foreground">(opcional)</span>
               </label>
-              <input
-                type="password"
-                value={inviteCode}
-                onChange={(e) => setInviteCode(e.target.value)}
-                placeholder="Deixe em branco para conta de operador"
-                className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a2a6c]/30"
-              />
+              <div className="relative mt-2">
+                <input
+                  type={showInviteCode ? "text" : "password"}
+                  value={inviteCode}
+                  onChange={(e) => setInviteCode(e.target.value)}
+                  placeholder="Deixe em branco para conta de operador"
+                  className="w-full rounded-md border border-input bg-background px-3 py-2.5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a2a6c]/30"
+                />
+                <button
+                  type="button"
+                  aria-label={showInviteCode ? "Ocultar código" : "Mostrar código"}
+                  onClick={() => setShowInviteCode((v) => !v)}
+                  className="absolute inset-y-0 right-0 grid w-11 place-items-center text-[#0a2a6c] hover:bg-[#0a2a6c]/5"
+                >
+                  {showInviteCode ? "🙈" : "👁️"}
+                </button>
+              </div>
               <p className="text-[11px] text-muted-foreground mt-1">
                 Somente quem possui o código fornecido pela diretoria pode criar contas de gestão.
               </p>
