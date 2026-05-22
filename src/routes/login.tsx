@@ -94,6 +94,11 @@ function LoginPage() {
             >
               Entrar
             </button>
+            <div className="text-right">
+              <Link to="/esqueci-senha" className="text-xs text-[#0a2a6c] font-semibold hover:underline">
+                Esqueci minha senha
+              </Link>
+            </div>
           </form>
 
           <p className="text-sm text-muted-foreground mt-6 text-center">
