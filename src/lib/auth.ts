@@ -16,8 +16,9 @@ function fromSession(session: Session | null): User | null {
 const db = supabase as any;
 
 async function fetchRole(userId: string): Promise<Role> {
-  const { data } = await db.from("user_roles").select("role").eq("user_id", userId).maybeSingle();
-  return (data?.role as Role) ?? "operador";
+  const { data } = await db.from("user_roles").select("role").eq("user_id", userId);
+  const roles = ((data ?? []) as { role: Role }[]).map((item) => item.role);
+  return roles.includes("gestor") ? "gestor" : "operador";
 }
 
 export function useAuth() {
@@ -60,7 +61,7 @@ export function useAuth() {
       password,
       options: {
         data: { nome: name },
-        emailRedirectTo: `${window.location.origin}/dashboard`,
+        emailRedirectTo: `${window.location.origin}/login`,
       },
     });
     if (error) throw new Error(error.message);
