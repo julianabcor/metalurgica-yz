@@ -68,8 +68,9 @@ export function useAuth() {
   }, []);
 
   const refreshRole = useCallback(async () => {
-    if (!user) return null;
-    const r = await fetchRole(user.id);
+    const uid = user?.id ?? (await supabase.auth.getSession()).data.session?.user.id;
+    if (!uid) return null;
+    const r = await fetchRole(uid);
     setRole(r);
     return r;
   }, [user]);
