@@ -7,7 +7,7 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginPage() {
-  const { login, user, ready } = useAuth();
+  const { login, user, role, ready } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,8 +15,9 @@ function LoginPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (ready && user) navigate({ to: "/dashboard" });
-  }, [ready, user, navigate]);
+    if (!ready || !user || role === null) return;
+    navigate({ to: role === "gestor" ? "/gestao" : "/dashboard" });
+  }, [ready, user, role, navigate]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
