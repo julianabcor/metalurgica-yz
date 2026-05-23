@@ -9,7 +9,7 @@ export const Route = createFileRoute("/cadastro")({
 });
 
 function RegisterPage() {
-  const { register, refreshRole, user, ready } = useAuth();
+  const { register, refreshRole, user, role, ready } = useAuth();
   const claimGestor = useServerFn(claimGestorRole);
   const navigate = useNavigate();
   const [name, setName] = useState("");
@@ -22,8 +22,8 @@ function RegisterPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (ready && user) navigate({ to: "/dashboard" });
-  }, [ready, user, navigate]);
+    if (ready && user && role) navigate({ to: role === "gestor" ? "/gestao" : "/dashboard" });
+  }, [ready, user, role, navigate]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
