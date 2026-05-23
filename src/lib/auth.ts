@@ -30,14 +30,15 @@ export function useAuth() {
       const u = fromSession(session);
       setUser(u);
       if (u) {
-        // defer to avoid deadlock in onAuthStateChange
-        setTimeout(async () => setRole(await fetchRole(u.id)), 0);
+        const r = await fetchRole(u.id);
+        setRole(r);
       } else {
         setRole(null);
       }
     };
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
-      apply(session);
+      // defer to avoid deadlock inside onAuthStateChange
+      setTimeout(() => { apply(session); }, 0);
     });
     supabase.auth.getSession().then(async ({ data }) => {
       await apply(data.session);
