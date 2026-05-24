@@ -9,30 +9,33 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const { login, user, role, ready } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [matricula, setMatricula] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    if (submitting) return;
     if (!ready || !user || role === null) return;
     navigate({ to: role === "gestor" ? "/gestao" : "/dashboard" });
-  }, [ready, user, role, navigate]);
+  }, [ready, user, role, navigate, submitting]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSubmitting(true);
     try {
-      const r = await login(email.trim(), password);
-      navigate({ to: r === "gestor" ? "/gestao" : "/dashboard" });
+      const r = await login(matricula, password);
+      navigate({ to: r.role === "gestor" ? "/gestao" : "/dashboard" });
     } catch (err) {
       setError((err as Error).message);
+      setSubmitting(false);
     }
   };
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
-      {/* Left panel */}
       <aside
         className="relative hidden lg:flex flex-col justify-between p-10 text-white"
         style={{
@@ -59,24 +62,24 @@ function LoginPage() {
         <div className="text-xs text-white/50">© 2026 Metalúrgica YZ</div>
       </aside>
 
-      {/* Form */}
       <main className="flex items-center justify-center px-6 py-12 bg-white">
         <div className="w-full max-w-sm">
           <h1 className="text-2xl font-bold text-[#0a2a6c]">Entrar no portal</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Use seu email e senha cadastrados.
+            Use sua matrícula e senha cadastradas.
           </p>
 
           <form onSubmit={onSubmit} className="mt-8 space-y-4">
             <div>
-              <label className="text-sm font-semibold text-[#0a2a6c]">Email</label>
+              <label className="text-sm font-semibold text-[#0a2a6c]">Matrícula / Cadastro</label>
               <input
-                type="email"
+                type="text"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={matricula}
+                onChange={(e) => setMatricula(e.target.value)}
                 className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a2a6c]/30"
-                placeholder="voce@empresa.com"
+                placeholder="Ex: 001234"
+                autoComplete="username"
               />
             </div>
             <div>
@@ -88,6 +91,7 @@ function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full rounded-md border border-input bg-background px-3 py-2.5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a2a6c]/30"
+                  autoComplete="current-password"
                 />
                 <button
                   type="button"
@@ -102,9 +106,10 @@ function LoginPage() {
             {error && <p className="text-xs text-rose-600">{error}</p>}
             <button
               type="submit"
-              className="w-full rounded-md bg-[#0a2a6c] hover:bg-[#0a2a6c]/90 text-white py-2.5 text-sm font-medium"
+              disabled={submitting}
+              className="w-full rounded-md bg-[#0a2a6c] hover:bg-[#0a2a6c]/90 disabled:opacity-60 text-white py-2.5 text-sm font-medium"
             >
-              Entrar
+              {submitting ? "Entrando..." : "Entrar"}
             </button>
             <div className="text-right">
               <Link to="/esqueci-senha" className="text-xs text-[#0a2a6c] font-semibold hover:underline">

@@ -1,23 +1,18 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { useServerFn } from "@tanstack/react-start";
 import { useAuth } from "@/lib/auth";
-import { claimGestorRole } from "@/lib/roles.functions";
 
 export const Route = createFileRoute("/cadastro")({
   component: RegisterPage,
 });
 
 function RegisterPage() {
-  const { register, refreshRole, user, role, ready } = useAuth();
-  const claimGestor = useServerFn(claimGestorRole);
+  const { register, user, role, ready } = useAuth();
   const navigate = useNavigate();
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [matricula, setMatricula] = useState("");
   const [password, setPassword] = useState("");
-  const [inviteCode, setInviteCode] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [showInviteCode, setShowInviteCode] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -29,26 +24,15 @@ function RegisterPage() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    if (!matricula.trim()) return setError("Informe sua matrícula.");
     if (password.length < 6) return setError("A senha deve ter pelo menos 6 caracteres.");
     setSubmitting(true);
     try {
-      await register(name.trim(), email.trim(), password);
-      let target: "/gestao" | "/dashboard" = "/dashboard";
-      if (inviteCode.trim()) {
-        try {
-          await claimGestor({ data: { code: inviteCode.trim() } });
-          const r = await refreshRole();
-          if (r === "gestor") target = "/gestao";
-        } catch (err) {
-          setError(`Cadastro criado, mas código de gestor inválido: ${(err as Error).message}`);
-          setSubmitting(false);
-          return;
-        }
-      }
-      navigate({ to: target });
+      await register(name.trim(), matricula.trim(), password);
+      // Novos cadastros sempre entram como operador. Promoção para chefia/gestão é feita pela diretoria.
+      navigate({ to: "/dashboard" });
     } catch (err) {
       setError((err as Error).message);
-    } finally {
       setSubmitting(false);
     }
   };
@@ -74,7 +58,7 @@ function RegisterPage() {
             Junte-se ao time que opera com a Metalúrgica YZ.
           </h2>
           <p className="mt-4 text-sm text-white/70">
-            Cadastro gratuito. Sem cartão de crédito.
+            Cadastro gratuito. Use sua matrícula da empresa.
           </p>
         </div>
 
@@ -85,7 +69,7 @@ function RegisterPage() {
         <div className="w-full max-w-sm">
           <h1 className="text-2xl font-bold text-[#0a2a6c]">Criar sua conta</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Acesso completo ao portal industrial.
+            Acesso ao Portal do Operador.
           </p>
 
           <form onSubmit={onSubmit} className="mt-8 space-y-4">
@@ -99,14 +83,18 @@ function RegisterPage() {
               />
             </div>
             <div>
-              <label className="text-sm font-semibold text-[#0a2a6c]">Email</label>
+              <label className="text-sm font-semibold text-[#0a2a6c]">Matrícula / Cadastro</label>
               <input
-                type="email"
+                type="text"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={matricula}
+                onChange={(e) => setMatricula(e.target.value)}
+                placeholder="Ex: 001234"
                 className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a2a6c]/30"
               />
+              <p className="text-[11px] text-muted-foreground mt-1">
+                Esta será a sua identificação para entrar no sistema.
+              </p>
             </div>
             <div>
               <label className="text-sm font-semibold text-[#0a2a6c]">Senha (mín. 6 caracteres)</label>
@@ -127,31 +115,6 @@ function RegisterPage() {
                   {showPassword ? "🙈" : "👁️"}
                 </button>
               </div>
-            </div>
-            <div>
-              <label className="text-sm font-semibold text-[#0a2a6c]">
-                Código de gestor <span className="font-normal text-muted-foreground">(opcional)</span>
-              </label>
-              <div className="relative mt-2">
-                <input
-                  type={showInviteCode ? "text" : "password"}
-                  value={inviteCode}
-                  onChange={(e) => setInviteCode(e.target.value)}
-                  placeholder="Deixe em branco para conta de operador"
-                  className="w-full rounded-md border border-input bg-background px-3 py-2.5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-[#0a2a6c]/30"
-                />
-                <button
-                  type="button"
-                  aria-label={showInviteCode ? "Ocultar código" : "Mostrar código"}
-                  onClick={() => setShowInviteCode((v) => !v)}
-                  className="absolute inset-y-0 right-0 grid w-11 place-items-center text-[#0a2a6c] hover:bg-[#0a2a6c]/5"
-                >
-                  {showInviteCode ? "🙈" : "👁️"}
-                </button>
-              </div>
-              <p className="text-[11px] text-muted-foreground mt-1">
-                Somente quem possui o código fornecido pela diretoria pode criar contas de gestão.
-              </p>
             </div>
             {error && <p className="text-xs text-rose-600">{error}</p>}
             <button
