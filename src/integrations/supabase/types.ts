@@ -142,18 +142,24 @@ export type Database = {
       }
       profiles: {
         Row: {
+          cargo: string
           created_at: string
           id: string
+          matricula: string | null
           nome: string
         }
         Insert: {
+          cargo?: string
           created_at?: string
           id: string
+          matricula?: string | null
           nome: string
         }
         Update: {
+          cargo?: string
           created_at?: string
           id?: string
+          matricula?: string | null
           nome?: string
         }
         Relationships: []
